@@ -1,0 +1,32 @@
+val df = spark.read.option("multiline","true").json("/user/vishalcanada1316gmail/bank_edited.json")
+df.show()
+df.agg(max($"age"),min($"age"),avg($"age")).show()
+df.createOrReplaceTempView("df1")
+df.registerTempTable("df2")
+val age_count = spark.sql("SELECT age, count(*) as count from df2 where y='yes' group by age order by count desc")
+age_count.show()
+val marital_count = spark.sql("SELECT marital, count(*) as count from df2 where y='yes' group by marital order by count desc")
+marital_count.show()
+val age_marital_count = spark.sql("SELECT age,marital, count(*) as count from df2 where y='yes' group by age,marital order by count desc")
+age_marital_count.show()
+val age_categorized = spark.udf.register("age_count",(age:Int) => {
+if (age < 17)
+"minor"
+else if (age > 17 && age <= 45)
+"adult"
+else if (age > 46 && age <= 55)
+"middle age"
+else
+"old"
+})
+val newdf = df.withColumn("age_category", age_categorized(df("age")))
+newdf.show(5)
+newdf.registerTempTable("newdftable")
+val age_cat_scrb = spark.sql("SELECT age_category, count(*) as count from newdftable where y='yes' group by age_category order by count desc") 
+age_cat_scrb.show()
+import org.apache.spark.ml.feature.StringIndexer
+val newdf1 = new StringIndexer().setInputCol("age_category").setOutputCol("ageIndex")
+val agemodel = newdf1.fit(newdf)
+agemodel.transform(newdf).select("age_category","ageIndex").show(10)
+
+
