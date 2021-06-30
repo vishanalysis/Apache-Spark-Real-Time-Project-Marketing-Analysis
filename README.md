@@ -17,8 +17,7 @@ The marketing campaigns were based on phone calls. Often, the same customer was 
 8 - contact: contact communication type (categorical: 'cellular', 'telephone')
 9 - month: Month of last contact (categorical: 'jan', 'feb', 'mar', ..., 'nov', 'dec')
 10 - day_of_week: last contact day of the week (categorical: 'mon','tue','wed','thu','fri')
-© Copyright 2016, Simplilearn. All rights reserved. P a g e | 2
-11 - duration: last contact duration, in seconds (numeric). Important note: this attribute highly affects the output target (example, if duration=0 then y='no'). Yet, the duration is not known before a call is performed. Also, after the end of the call “y” is obviously known. Thus, this input should only be included for benchmark purposes and should be discarded if the intention is to have a realistic predictive model.
+11 - duration: last contact duration, in seconds (numeric).
 # other attributes:
 12 - campaign: number of times a customer was contacted during the campaign (numeric, includes last contact)
 13 - pdays: number of days passed after the customer was last contacted from a previous campaign (numeric; 999 means customer was not previously contacted)
